@@ -57,8 +57,7 @@ export async function POST(req: Request) {
           where: {
             or: [
               { name: { contains: searchTerm } },
-              { slug: { contains: searchTerm } },
-              { description: { contains: searchTerm } }
+              { slug: { contains: searchTerm } }
             ]
           },
           limit: 3,

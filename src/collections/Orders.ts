@@ -1,4 +1,5 @@
 import { CollectionConfig } from "payload";
+import type { User } from "../payload-types";
 
 export const Orders: CollectionConfig = {
   slug: "orders",
@@ -7,7 +8,15 @@ export const Orders: CollectionConfig = {
     defaultColumns: ["id", "status", "total", "createdAt"],
   },
   access: {
-    read: () => true,
+    read: ({ req: { user } }: { req: { user: User | null } }) => {
+      if (!user) return false;
+      if (user.role === "admin" || user.role === "sales_manager") return true;
+      return {
+        user: {
+          equals: user.id,
+        },
+      };
+    },
     create: () => true,
   },
   fields: [

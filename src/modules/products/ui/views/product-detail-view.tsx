@@ -26,11 +26,13 @@ import { useCurrency } from "@/providers/currency-provider";
 interface ProductDetailViewProps {
   initialProduct: Product;
   serverURL: string;
+  userRole?: string;
 }
 
 export const ProductDetailView = ({
   initialProduct,
   serverURL,
+  userRole,
 }: ProductDetailViewProps) => {
   const [isPreviewOpen, setIsPreviewOpen] = useState(true);
   const [isSubmittingQuote, setIsSubmittingQuote] = useState(false);
@@ -45,6 +47,8 @@ export const ProductDetailView = ({
     serverURL: effectiveServerURL,
     depth: 1,
   });
+
+  const showAdminPreview = userRole === "admin" || userRole === "sales_manager";
 
   if (!product) return null;
 
@@ -261,91 +265,93 @@ export const ProductDetailView = ({
       </div>
 
       {/* Live Preview Toggle Button */}
-      <div className="fixed bottom-6 right-6 z-[9999]">
-        {isPreviewOpen ? (
-          <div className="bg-white text-slate-900 rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col min-w-[240px] transition-all duration-300">
-            {/* Header with Toggle */}
-            <div className="bg-slate-50 px-4 py-3 flex items-center justify-between border-b border-slate-100">
-              <div className="flex items-center gap-2">
-                <div
-                  className={`w-2.5 h-2.5 rounded-full ${isLoading ? "bg-amber-400 rotate-180 animate-pulse" : "bg-emerald-500"}`}
-                />
-                <span className="text-[11px] font-bold tracking-wider text-slate-500 uppercase">
-                  {isLoading ? "Syncing..." : "Live Preview"}
-                </span>
-              </div>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setIsPreviewOpen(false);
-                }}
-                className="hover:bg-slate-200 p-1.5 rounded-lg transition-colors cursor-pointer text-slate-400 hover:text-slate-600"
-                title="Hide Preview Bar"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* Links */}
-            <div className="flex flex-col p-2 space-y-1">
-              <a
-                href={`/admin/collections/products/${String(product.id)}`}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 rounded-xl transition-colors group cursor-pointer"
-              >
-                <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-100 transition-colors">
-                  <Pencil className="w-4 h-4" />
+      {showAdminPreview && (
+        <div className="fixed bottom-6 right-6 z-[9999]">
+          {isPreviewOpen ? (
+            <div className="bg-white text-slate-900 rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col min-w-[240px] transition-all duration-300">
+              {/* Header with Toggle */}
+              <div className="bg-slate-50 px-4 py-3 flex items-center justify-between border-b border-slate-100">
+                <div className="flex items-center gap-2">
+                  <div
+                    className={`w-2.5 h-2.5 rounded-full ${isLoading ? "bg-amber-400 rotate-180 animate-pulse" : "bg-emerald-500"}`}
+                  />
+                  <span className="text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+                    {isLoading ? "Syncing..." : "Live Preview"}
+                  </span>
                 </div>
-                <span className="text-sm font-semibold text-slate-700">
-                  Edit Document
-                </span>
-              </a>
-
-              <div className="flex items-center gap-3 px-3 py-2.5 bg-emerald-50 text-emerald-700 rounded-xl border border-emerald-100/50">
-                <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
-                  <Eye className="w-4 h-4" />
-                </div>
-                <span className="text-sm font-semibold">Preview Active</span>
-                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsPreviewOpen(false);
+                  }}
+                  className="hover:bg-slate-200 p-1.5 rounded-lg transition-colors cursor-pointer text-slate-400 hover:text-slate-600"
+                  title="Hide Preview Bar"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               </div>
 
-              <a
-                href={`/api/products/${String(product.id)}`}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 rounded-xl transition-colors group cursor-pointer"
-              >
-                <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 group-hover:bg-slate-200 transition-colors">
-                  <Terminal className="w-4 h-4" />
+              {/* Links */}
+              <div className="flex flex-col p-2 space-y-1">
+                <a
+                  href={`/admin/collections/products/${String(product.id)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 rounded-xl transition-colors group cursor-pointer"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-100 transition-colors">
+                    <Pencil className="w-4 h-4" />
+                  </div>
+                  <span className="text-sm font-semibold text-slate-700">
+                    Edit Document
+                  </span>
+                </a>
+
+                <div className="flex items-center gap-3 px-3 py-2.5 bg-emerald-50 text-emerald-700 rounded-xl border border-emerald-100/50">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
+                    <Eye className="w-4 h-4" />
+                  </div>
+                  <span className="text-sm font-semibold">Preview Active</span>
+                  <div className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 </div>
-                <span className="text-sm font-semibold text-slate-700">
-                  View JSON API
-                </span>
-              </a>
+
+                <a
+                  href={`/api/products/${String(product.id)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 rounded-xl transition-colors group cursor-pointer"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 group-hover:bg-slate-200 transition-colors">
+                    <Terminal className="w-4 h-4" />
+                  </div>
+                  <span className="text-sm font-semibold text-slate-700">
+                    View JSON API
+                  </span>
+                </a>
+              </div>
             </div>
-          </div>
-        ) : (
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setIsPreviewOpen(true);
-            }}
-            className="bg-white text-slate-900 px-6 py-4 rounded-full shadow-2xl hover:shadow-emerald-500/10 transition-all border border-slate-200 active:scale-95 flex items-center gap-3 cursor-pointer group hover:border-emerald-200"
-            title="Open Live Preview Tools"
-          >
-            <div
-              className={`w-2 h-2 rounded-full ${isLoading ? "bg-amber-400 animate-pulse" : "bg-emerald-500"}`}
-            />
-            <span className="text-sm font-bold text-slate-700 group-hover:text-emerald-600 transition-colors">
-              Live Preview
-            </span>
-            <Eye className="w-5 h-5 text-slate-400 group-hover:text-emerald-500 group-hover:rotate-12 transition-all" />
-          </button>
-        )}
-      </div>
+          ) : (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsPreviewOpen(true);
+              }}
+              className="bg-white text-slate-900 px-6 py-4 rounded-full shadow-2xl hover:shadow-emerald-500/10 transition-all border border-slate-200 active:scale-95 flex items-center gap-3 cursor-pointer group hover:border-emerald-200"
+              title="Open Live Preview Tools"
+            >
+              <div
+                className={`w-2 h-2 rounded-full ${isLoading ? "bg-amber-400 animate-pulse" : "bg-emerald-500"}`}
+              />
+              <span className="text-sm font-bold text-slate-700 group-hover:text-emerald-600 transition-colors">
+                Live Preview
+              </span>
+              <Eye className="w-5 h-5 text-slate-400 group-hover:text-emerald-500 group-hover:rotate-12 transition-all" />
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };

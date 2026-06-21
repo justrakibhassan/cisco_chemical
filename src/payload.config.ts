@@ -28,6 +28,11 @@ export default buildConfig({
         Logo: "./components/payload/Logo",
         Icon: "./components/payload/Icon",
       },
+      views: {
+        dashboard: {
+          Component: "./components/payload/Dashboard",
+        },
+      },
     },
     meta: {
       titleSuffix: "- Cisco Chemical",

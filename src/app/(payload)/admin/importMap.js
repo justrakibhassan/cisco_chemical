@@ -24,6 +24,7 @@ import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0
 import { default as default_6fe5e005b409233c7fca06cae1633729 } from '../../../components/payload/Icon'
 import { default as default_ac2a1ef35fe176856f14970b2c93f3f1 } from '../../../components/payload/Logo'
 import { VercelBlobClientUploadHandler as VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e } from '@payloadcms/storage-vercel-blob/client'
+import { default as default_458578b7ca784216322e4ca4343cab2a } from '../../../components/payload/Dashboard'
 import { CollectionCards as CollectionCards_ab83ff7e88da8d3530831f296ec4756a } from '@payloadcms/ui/rsc'
 
 export const importMap = {
@@ -53,5 +54,6 @@ export const importMap = {
   "./components/payload/Icon#default": default_6fe5e005b409233c7fca06cae1633729,
   "./components/payload/Logo#default": default_ac2a1ef35fe176856f14970b2c93f3f1,
   "@payloadcms/storage-vercel-blob/client#VercelBlobClientUploadHandler": VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e,
+  "./components/payload/Dashboard#default": default_458578b7ca784216322e4ca4343cab2a,
   "@payloadcms/ui/rsc#CollectionCards": CollectionCards_ab83ff7e88da8d3530831f296ec4756a
 }
