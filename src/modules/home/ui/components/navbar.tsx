@@ -93,7 +93,7 @@ export const Navbar = ({ user: initialUser }: NavbarProps) => {
       }`}
     >
       {/* Main Navbar */}
-      <div className="max-w-8xl mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-12 py-3 lg:py-4">
+      <div className="max-w-[1720px] mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-12 py-3 lg:py-4">
         {/* Logo - Left */}
         <Link
           href="/"

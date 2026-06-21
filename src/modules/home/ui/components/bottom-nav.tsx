@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Package, ClipboardList, User as UserIcon } from "lucide-react";
@@ -13,6 +14,11 @@ interface BottomNavProps {
 
 export const BottomNav = ({ user }: BottomNavProps) => {
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const navItems = [
     {
@@ -42,7 +48,7 @@ export const BottomNav = ({ user }: BottomNavProps) => {
       <div className="bg-white/85 backdrop-blur-xl border border-white/40 rounded-3xl p-2 flex items-center justify-between shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive = pathname === item.href;
+          const isActive = mounted && pathname === item.href;
 
           return (
             <Link

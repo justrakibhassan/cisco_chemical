@@ -14,7 +14,7 @@ export const Footer = () => {
 
   return (
     <footer className="bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 border-t border-gray-200">
-      <div className="max-w-8xl mx-auto px-6 lg:px-12 py-3 lg:py-4">
+      <div className="max-w-[1720px] mx-auto px-6 lg:px-12 py-3 lg:py-4">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-8 lg:ml-10">
           {/* Company Info */}
@@ -66,7 +66,7 @@ export const Footer = () => {
           <div className="space-y-6">
             <h4 className="font-bold text-lg text-gray-900 relative">
               Services
-              <div className="absolute -bottom-2 left-0 w-12 h-0.5 bg-gradient-to-r from-green-600 to-green-400"></div>
+              <span className="absolute -bottom-2 left-0 w-12 h-0.5 bg-gradient-to-r from-green-600 to-green-400 block"></span>
             </h4>
             <ul className="space-y-3">
               {[
@@ -95,7 +95,7 @@ export const Footer = () => {
           <div className="space-y-6">
             <h4 className="font-bold text-lg text-gray-900 dark:text-white relative">
               Company
-              <div className="absolute -bottom-2 left-0 w-12 h-0.5 bg-gradient-to-r from-green-600 to-green-400 dark:from-green-400 dark:to-green-300"></div>
+              <span className="absolute -bottom-2 left-0 w-12 h-0.5 bg-gradient-to-r from-green-600 to-green-400 dark:from-green-400 dark:to-green-300 block"></span>
             </h4>
             <ul className="space-y-3">
               {[
@@ -125,7 +125,7 @@ export const Footer = () => {
           <div className="space-y-6">
             <h4 className="font-bold text-lg text-gray-900 dark:text-white relative">
               Connect With Us
-              <div className="absolute -bottom-2 left-0 w-12 h-0.5 bg-gradient-to-r from-green-600 to-green-400 dark:from-green-400 dark:to-green-300"></div>
+              <span className="absolute -bottom-2 left-0 w-12 h-0.5 bg-gradient-to-r from-green-600 to-green-400 dark:from-green-400 dark:to-green-300 block"></span>
             </h4>
 
             {/* Social Links */}
@@ -157,7 +157,7 @@ export const Footer = () => {
 
         {/* Copyright moved to bottom */}
         <div className="pt-8 border-t border-gray-200">
-          <div className="text-xs sm:text-sm text-gray-600 text-center">
+          <div className="text-xs sm:text-sm text-gray-600 text-center" suppressHydrationWarning>
             © {currentYear} Cisco Chemicals Inc. All rights reserved.
           </div>
         </div>

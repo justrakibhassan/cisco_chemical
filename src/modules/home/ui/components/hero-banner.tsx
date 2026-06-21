@@ -31,6 +31,7 @@ interface Slide {
   accent: string;
   accentGlow: string;
   icon: React.ElementType;
+  glows: string[];
 }
 
 interface Stat {
@@ -56,6 +57,7 @@ const HeroBanner: React.FC = () => {
       accent: "text-emerald-600 dark:text-emerald-400",
       accentGlow: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
       icon: Microscope,
+      glows: ["bg-emerald-500/10", "bg-teal-500/10"],
     },
     {
       title: "Industrial Scale Solutions",
@@ -66,6 +68,7 @@ const HeroBanner: React.FC = () => {
       accent: "text-blue-650 dark:text-blue-400",
       accentGlow: "bg-blue-500/10 text-blue-600 border-blue-500/20",
       icon: Atom,
+      glows: ["bg-blue-500/10", "bg-indigo-500/10"],
     },
     {
       title: "Molecular Research & Design",
@@ -76,6 +79,7 @@ const HeroBanner: React.FC = () => {
       accent: "text-cyan-650 dark:text-cyan-400",
       accentGlow: "bg-cyan-500/10 text-cyan-600 border-cyan-500/20",
       icon: Sparkles,
+      glows: ["bg-cyan-500/10", "bg-purple-500/10"],
     },
   ];
 
@@ -114,32 +118,38 @@ const HeroBanner: React.FC = () => {
 
   return (
     <section className="relative min-h-screen w-full flex flex-col justify-between pt-28 lg:pt-24 pb-12 overflow-hidden bg-slate-50 text-slate-900 border-b border-slate-200/60">
-      
-      {/* Ambient background images */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={`bg-image-${currentSlide}`}
-          initial={{ opacity: 0, scale: 1.05 }}
-          animate={{ opacity: 0.18, scale: 1 }}
-          exit={{ opacity: 0, scale: 1.02 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-          className="absolute inset-0 z-0 pointer-events-none select-none"
-        >
-          <Image
-            src={slides[currentSlide].image}
-            alt={slides[currentSlide].title}
-            fill
-            className="object-cover filter blur-[2px]"
-            priority
-          />
-        </motion.div>
-      </AnimatePresence>
+      {/* Ambient background is clean blueprint CSS grids + dynamic slide glows */}
 
       {/* Grid pattern & visual accent rings */}
       <div className="absolute inset-0 z-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-35" />
       
-      <div className="absolute top-1/4 left-1/3 w-[600px] h-[600px] rounded-full bg-emerald-400/10 blur-[120px] -z-10 pointer-events-none" />
-      <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] rounded-full bg-blue-400/10 blur-[100px] -z-10 pointer-events-none" />
+      {/* Dynamic Slide Glows */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={`glow1-${currentSlide}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.0 }}
+          className={cn(
+            "absolute top-1/4 left-1/3 w-[600px] h-[600px] rounded-full blur-[120px] -z-10 pointer-events-none transition-all duration-1000",
+            slides[currentSlide].glows[0]
+          )}
+        />
+      </AnimatePresence>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={`glow2-${currentSlide}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.0 }}
+          className={cn(
+            "absolute top-1/3 right-1/4 w-[500px] h-[500px] rounded-full blur-[100px] -z-10 pointer-events-none transition-all duration-1000",
+            slides[currentSlide].glows[1]
+          )}
+        />
+      </AnimatePresence>
 
       {/* Technical Overlay - Stays on top of images but below text */}
       <div className="absolute inset-0 z-10 pointer-events-none">

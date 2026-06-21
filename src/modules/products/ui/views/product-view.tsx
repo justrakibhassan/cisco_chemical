@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useQueryState, parseAsInteger, parseAsBoolean } from "nuqs";
-import { Search, SlidersHorizontal, X } from "lucide-react";
+import { Search, SlidersHorizontal, X, Grid, List } from "lucide-react";
 import { Product, Category } from "@/payload-types";
 import { useCart } from "@/hooks/use-cart";
 import {
@@ -11,6 +11,7 @@ import {
 } from "@/modules/products/actions";
 import { ProductFilters } from "../components/product-filters";
 import { ProductCard } from "../components/product-card";
+import { cn } from "@/lib/utils";
 import {
   Pagination,
   PaginationContent,
@@ -47,6 +48,7 @@ export function ProductsView({
   initialProducts = EMPTY_ARRAY,
 }: ProductsViewProps) {
   const { addToCart } = useCart();
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   // Query State
   const [search, setSearch] = useQueryState("q", { defaultValue: "" });
@@ -77,7 +79,7 @@ export function ProductsView({
   }>({
     products: initialProducts,
     totalDocs: initialProducts.length,
-    totalPages: Math.ceil(initialProducts.length / 9) || 1,
+    totalPages: Math.ceil(initialProducts.length / 12) || 1,
   });
   const [categories, setCategories] = useState<Category[]>([]);
 
@@ -91,7 +93,7 @@ export function ProductsView({
       inStock,
       sort,
       page,
-      limit: 9,
+      limit: 12,
     });
     setData({
       products: result.products,
@@ -118,7 +120,7 @@ export function ProductsView({
       setData({
         products: initialProducts,
         totalDocs: initialProducts.length,
-        totalPages: Math.ceil(initialProducts.length / 9) || 1,
+        totalPages: Math.ceil(initialProducts.length / 12) || 1,
       });
       setLoading(false);
     }
@@ -148,23 +150,24 @@ export function ProductsView({
 
   return (
     <div className="min-h-screen bg-[#FDFDFD]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+      <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-12 py-12 lg:py-20">
         <div className="flex flex-col gap-8">
+          
           {/* Mobile Filter Trigger & Toolbar */}
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-4 flex-1">
-                <div className="relative flex-1 max-w-sm">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 font-bold" />
+                <div className="relative flex-1 max-w-md">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 font-semibold" />
                   <input
                     type="text"
-                    placeholder="Search chemicals..."
+                    placeholder="Search catalog chemicals..."
                     value={search}
                     onChange={(e) => {
                       setSearch(e.target.value);
                       setPage(1);
                     }}
-                    className="w-full pl-11 pr-4 py-3 bg-white rounded-2xl border border-slate-100 text-xs font-bold focus:ring-2 focus:ring-emerald-500 transition-all uppercase tracking-wider shadow-sm"
+                    className="w-full pl-11 pr-4 py-3 bg-white rounded-2xl border border-slate-200/60 text-xs font-bold focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:outline-none transition-all placeholder:text-slate-300 shadow-sm"
                   />
                 </div>
                 
@@ -213,18 +216,47 @@ export function ProductsView({
                 </Sheet>
               </div>
 
-              <div className="hidden sm:flex items-center gap-4">
+              {/* Toolbar Actions: Sort & Layout Switcher */}
+              <div className="flex items-center gap-3 shrink-0">
                 <Select value={sort} onValueChange={(val) => setSort(val)}>
-                  <SelectTrigger className="w-[180px] rounded-2xl border-slate-100 bg-white h-11 font-black text-slate-700 text-[10px] uppercase tracking-widest shadow-sm">
+                  <SelectTrigger className="w-[180px] rounded-2xl border-slate-200 bg-white h-11 font-black text-slate-700 text-[10px] uppercase tracking-widest shadow-sm">
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
-                  <SelectContent className="rounded-2xl border-slate-100">
-                    <SelectItem value="-createdAt" className="font-black text-[10px] uppercase tracking-widest">Newest First</SelectItem>
-                    <SelectItem value="price" className="font-black text-[10px] uppercase tracking-widest">Price: Low to High</SelectItem>
-                    <SelectItem value="-price" className="font-black text-[10px] uppercase tracking-widest">Price: High to Low</SelectItem>
-                    <SelectItem value="name" className="font-black text-[10px] uppercase tracking-widest">Name: A to Z</SelectItem>
+                  <SelectContent className="rounded-2xl border-slate-150 shadow-lg">
+                    <SelectItem value="-createdAt" className="font-bold text-[10px] uppercase tracking-wider">Newest First</SelectItem>
+                    <SelectItem value="price" className="font-bold text-[10px] uppercase tracking-wider">Price: Low to High</SelectItem>
+                    <SelectItem value="-price" className="font-bold text-[10px] uppercase tracking-wider">Price: High to Low</SelectItem>
+                    <SelectItem value="name" className="font-bold text-[10px] uppercase tracking-wider">Name: A to Z</SelectItem>
                   </SelectContent>
                 </Select>
+
+                {/* Grid / List switcher */}
+                <div className="hidden sm:flex items-center gap-1 bg-white p-1 rounded-2xl border border-slate-200/60 shadow-sm h-11">
+                  <button
+                    onClick={() => setViewMode("grid")}
+                    className={cn(
+                      "p-2 rounded-xl transition-all duration-200",
+                      viewMode === "grid"
+                        ? "bg-slate-950 text-white shadow-sm"
+                        : "text-slate-400 hover:text-slate-600 hover:bg-slate-50"
+                    )}
+                    aria-label="Grid layout"
+                  >
+                    <Grid className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => setViewMode("list")}
+                    className={cn(
+                      "p-2 rounded-xl transition-all duration-200",
+                      viewMode === "list"
+                        ? "bg-slate-950 text-white shadow-sm"
+                        : "text-slate-400 hover:text-slate-600 hover:bg-slate-50"
+                    )}
+                    aria-label="List layout"
+                  >
+                    <List className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -232,21 +264,21 @@ export function ProductsView({
             {(category !== "all" || inStock || search) && (
               <div className="flex flex-wrap gap-2">
                 {category !== "all" && (
-                   <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full text-[10px] font-black uppercase tracking-wider">
-                     Cat: {categories.find(c => String(c.id) === category)?.name || category}
-                     <button onClick={() => setCategory("all")}><X className="w-3 h-3"/></button>
+                   <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-100/50 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                     <span>Category: {categories.find(c => String(c.id) === category)?.name || category}</span>
+                     <button onClick={() => setCategory("all")} className="hover:text-emerald-950"><X className="w-3.5 h-3.5"/></button>
                    </div>
                 )}
                 {inStock && (
-                   <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full text-[10px] font-black uppercase tracking-wider">
-                     In Stock
-                     <button onClick={() => setInStock(false)}><X className="w-3 h-3"/></button>
+                   <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-100/50 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                     <span>In Stock Only</span>
+                     <button onClick={() => setInStock(false)} className="hover:text-emerald-950"><X className="w-3.5 h-3.5"/></button>
                    </div>
                 )}
                 {search && (
-                   <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full text-[10px] font-black uppercase tracking-wider">
-                     &ldquo;{search}&rdquo;
-                     <button onClick={() => setSearch("")}><X className="w-3 h-3"/></button>
+                   <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-100/50 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                     <span>Query: &ldquo;{search}&rdquo;</span>
+                     <button onClick={() => setSearch("")} className="hover:text-emerald-950"><X className="w-3.5 h-3.5"/></button>
                    </div>
                 )}
               </div>
@@ -254,6 +286,7 @@ export function ProductsView({
           </div>
 
           <div className="flex flex-col lg:flex-row gap-12">
+            
             {/* Desktop Filters Sidebar */}
             <aside className="hidden lg:block lg:w-80 shrink-0">
               <div className="sticky top-28">
@@ -289,23 +322,41 @@ export function ProductsView({
 
             {/* Main Content Area */}
             <main className="flex-1 space-y-8">
-              {/* Products Grid */}
+              {/* Products Container */}
               {loading ? (
-                <div className="grid grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+                <div className={cn(
+                  viewMode === "grid" 
+                    ? "grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6" 
+                    : "flex flex-col gap-4"
+                )}>
                   {[...Array(6)].map((_, i) => (
-                    <div key={i} className="space-y-4">
-                      <Skeleton className="h-48 sm:h-64 w-full rounded-[2rem]" />
-                      <Skeleton className="h-4 w-2/3" />
-                      <Skeleton className="h-4 w-full" />
+                    <div key={i} className={cn(
+                      "space-y-4 bg-white/60 p-4 border border-slate-100 rounded-3xl shadow-sm",
+                      viewMode === "list" && "flex flex-col md:flex-row gap-6 p-6 items-center"
+                    )}>
+                      <Skeleton className={cn(
+                        viewMode === "grid" ? "h-48 sm:h-64 w-full" : "h-40 w-full md:w-64 shrink-0",
+                        "rounded-2xl"
+                      )} />
+                      <div className="flex-1 space-y-3 w-full">
+                        <Skeleton className="h-5 w-2/3" />
+                        <Skeleton className="h-4 w-full" />
+                        <Skeleton className="h-4 w-1/2" />
+                      </div>
                     </div>
                   ))}
                 </div>
               ) : data.products.length > 0 ? (
-                <div className="grid grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+                <div className={cn(
+                  viewMode === "grid" 
+                    ? "grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6" 
+                    : "flex flex-col gap-5"
+                )}>
                   {data.products.map((product) => (
                     <ProductCard
                       key={product.id}
                       product={product}
+                      layoutMode={viewMode}
                       onAddToCart={() =>
                         addToCart({
                           id: String(product.id),
@@ -384,19 +435,19 @@ export function ProductsView({
 
 function NoResults({ onClear }: { onClear: () => void }) {
   return (
-    <div className="flex flex-col items-center justify-center py-20 bg-slate-50/50 rounded-[3rem] border-2 border-dashed border-slate-100">
-      <div className="w-20 h-20 bg-white rounded-[2rem] flex items-center justify-center shadow-xl mb-6">
-        <Search className="w-10 h-10 text-slate-200" />
+    <div className="flex flex-col items-center justify-center py-20 bg-slate-50/50 rounded-[3rem] border-2 border-dashed border-slate-200/40">
+      <div className="w-20 h-20 bg-white rounded-[2rem] flex items-center justify-center shadow-md mb-6 border border-slate-100">
+        <Search className="w-10 h-10 text-slate-250" />
       </div>
       <h3 className="text-2xl font-black text-slate-900 mb-2">
         No matches found
       </h3>
-      <p className="text-slate-500 font-medium mb-8">
+      <p className="text-slate-500 font-semibold mb-8 text-sm">
         Try adjusting your filters or search terms
       </p>
       <button
         onClick={onClear}
-        className="px-8 py-4 bg-emerald-600 text-white rounded-2xl font-black text-xs shadow-lg shadow-emerald-200 active:scale-95 transition-all uppercase tracking-widest"
+        className="px-8 py-4 bg-emerald-600 text-white rounded-2xl font-black text-xs shadow-lg shadow-emerald-150 hover:bg-emerald-700 active:scale-95 transition-all uppercase tracking-widest"
       >
         Reset All Filters
       </button>

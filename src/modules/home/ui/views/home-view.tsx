@@ -12,7 +12,7 @@ export const HomeView = ({ products = [] }: HomeViewProps) => {
   return (
     <>
       <HeroBanner />
-      <div className="pt-20">
+      <div>
         <ProductsHeader />
         <ProductGrid products={products} />
       </div>
