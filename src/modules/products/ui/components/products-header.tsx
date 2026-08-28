@@ -1,5 +1,3 @@
-import { Atom } from "lucide-react";
-
 export const ProductsHeader = () => {
   return (
     <div className="relative overflow-hidden py-16 sm:py-24 bg-[#0A0F0D]">
@@ -8,14 +6,6 @@ export const ProductsHeader = () => {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-6 text-center">
-        <div className="inline-flex items-center backdrop-blur-md rounded-full px-4 py-1.5 mb-6 border bg-white/5 border-white/10 text-emerald-400">
-          <Atom
-            className="w-4 h-4 mr-2 text-emerald-500"
-          />
-          <span className="text-[10px] font-black uppercase tracking-[0.2em]">
-            Advanced Chemical Solutions
-          </span>
-        </div>
 
         <h1 className="text-4xl md:text-6xl font-black text-white mb-6 leading-[1.1] tracking-tight">
           PREMIUM<br />
