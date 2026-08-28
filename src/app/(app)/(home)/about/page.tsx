@@ -143,7 +143,7 @@ const AboutPage: React.FC = () => {
         <div className="absolute inset-0 bg-black/30 dark:bg-black/50"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-green-600/20 to-purple-600/20 dark:from-green-500/10 dark:to-purple-500/10 animate-pulse"></div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20 lg:py-32">
+        <div className="relative max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20 lg:py-32">
           <div
             className={`transform transition-all duration-1000 ${isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"}`}
           >
@@ -185,7 +185,7 @@ const AboutPage: React.FC = () => {
 
       {/* Stats Section */}
       <section className="py-12 sm:py-16 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-12">
           <div
             ref={(el) => addToRefs(el, 1)}
             className={`grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 transform transition-all duration-1000 ${
@@ -225,7 +225,7 @@ const AboutPage: React.FC = () => {
 
       {/* Mission & Vision */}
       <section className="py-16 sm:py-20 bg-gradient-to-r from-green-50 to-green-50 dark:from-green-950/20 dark:to-green-950/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-12">
           <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
             <div
               ref={(el) => addToRefs(el, 2)}
@@ -323,7 +323,7 @@ const AboutPage: React.FC = () => {
 
       {/* Core Values */}
       <section className="py-16 sm:py-20 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-12">
           <div
             ref={(el) => addToRefs(el, 4)}
             className={`text-center mb-12 sm:mb-16 transform transition-all duration-1000 ${
@@ -379,7 +379,7 @@ const AboutPage: React.FC = () => {
 
       {/* Timeline */}
       <section className="py-16 sm:py-20 bg-gradient-to-br from-slate-50 to-green-50 dark:from-slate-900 dark:to-green-950/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-12">
           <div
             ref={(el) => addToRefs(el, 6)}
             className={`text-center mb-12 sm:mb-16 transform transition-all duration-1000 ${

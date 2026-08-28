@@ -277,7 +277,7 @@ export const CareersView = () => {
           </div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="relative max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-12 py-20">
           <div
             ref={heroRef}
             className={`text-center transform transition-all duration-1000 ease-out ${
@@ -381,7 +381,7 @@ export const CareersView = () => {
       </div>
 
       {/* Search and Filters */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-12 py-16">
         <div
           ref={searchRef}
           className={`bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-2xl p-8 shadow-xl mb-12 transform transition-all duration-1000 border ${
@@ -474,7 +474,7 @@ export const CareersView = () => {
 
       {/* Benefits Section */}
       <div className="bg-green-50 dark:bg-gray-800 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-12">
           <div
             ref={benefitsRef}
             className={`text-center mb-16 transform transition-all duration-1000 ${

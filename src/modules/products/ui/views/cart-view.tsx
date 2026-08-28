@@ -13,7 +13,7 @@ export const CartView = () => {
 
   if (!isLoaded) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-12 py-12">
         <div className="flex items-center justify-between mb-8">
           <Skeleton className="h-10 w-48" />
           <Skeleton className="h-6 w-20" />
@@ -71,7 +71,7 @@ export const CartView = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-12 py-12">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Your Cart</h1>
         <button

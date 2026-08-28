@@ -37,7 +37,7 @@ export const HeroBanner: React.FC = () => {
         <ScientificOverlay />
       </div>
 
-      <div className="container relative z-20 mx-auto px-4 sm:px-6 lg:px-12">
+      <div className="max-w-[1720px] relative z-20 mx-auto px-4 sm:px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           
           {/* Left Column: Clean, Minimal, Direct Copy, CTAs & Metrics */}

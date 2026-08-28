@@ -142,8 +142,8 @@ export const CheckoutView = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50/50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gray-50/50 py-12">
+      <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-12">
         <div className="mb-8">
             <Link href="/cart" className="flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
                 <ArrowLeft className="w-4 h-4 mr-1" />

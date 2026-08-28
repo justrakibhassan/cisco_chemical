@@ -97,7 +97,7 @@ export const Navbar = ({ user: initialUser }: NavbarProps) => {
         {/* Logo - Left */}
         <Link
           href="/"
-          className="flex items-center space-x-2 text-xl sm:text-2xl font-bold text-black group flex-shrink-0 lg:ml-10"
+          className="flex items-center space-x-2 text-xl sm:text-2xl font-bold text-black group flex-shrink-0"
         >
           <div className="w-8 h-8 sm:w-10 sm:h-10 relative">
             <Image
@@ -129,7 +129,7 @@ export const Navbar = ({ user: initialUser }: NavbarProps) => {
         </nav>
 
         {/* Right side - Search + ThemeToggle + Login + Mobile Menu */}
-        <div className="flex items-center gap-3 flex-shrink-0 lg:mr-10">
+        <div className="flex items-center gap-3 flex-shrink-0">
           {/* Search Button - Desktop */}
           <button
             onClick={() => setIsSearchOpen(true)}

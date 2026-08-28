@@ -5,7 +5,7 @@ export const ProductsHeader = () => {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#10b981_0%,transparent_50%)]"></div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 text-center">
+      <div className="relative max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-12 text-center">
 
         <h1 className="text-4xl md:text-6xl font-black text-white mb-6 leading-[1.1] tracking-tight">
           PREMIUM<br />

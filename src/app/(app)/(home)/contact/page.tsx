@@ -250,7 +250,7 @@ const ContactPage = () => {
         ref={heroRef}
         className="py-16 bg-white dark:bg-slate-800 transition-colors opacity-0"
       >
-        <div className="container mx-auto px-4 text-center">
+        <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-12 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 bg-clip-text text-transparent animate-slide-in-down stagger-1">
             Contact Us
           </h1>
@@ -261,7 +261,7 @@ const ContactPage = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-16">
+      <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-12 py-16">
         <div className="grid lg:grid-cols-2 gap-16">
           {/* Contact Information */}
           <div className="space-y-8">

@@ -12,7 +12,7 @@ export function ProductGrid({ products }: ProductGridProps) {
   const { addToCart } = useCart();
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-12 py-12">
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
         {products.map((product) => (
           <ProductCard
