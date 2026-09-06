@@ -6,7 +6,6 @@ import { ShoppingCart, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Product } from "@/payload-types";
 import { useCurrency } from "@/providers/currency-provider";
-import { cn } from "@/lib/utils";
 
 interface ProductCardProps {
   product: Product;

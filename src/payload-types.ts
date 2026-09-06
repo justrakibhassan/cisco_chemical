@@ -251,6 +251,7 @@ export interface Category {
 export interface Order {
   id: number;
   user: number | User;
+  paymentIntentId?: string | null;
   status?: ('pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled') | null;
   total: number;
   items?:
@@ -468,6 +469,7 @@ export interface ProductsSelect<T extends boolean = true> {
  */
 export interface OrdersSelect<T extends boolean = true> {
   user?: T;
+  paymentIntentId?: T;
   status?: T;
   total?: T;
   items?:

@@ -28,9 +28,19 @@ export const Orders: CollectionConfig = {
       index: true,
     },
     {
+      name: "paymentIntentId",
+      type: "text",
+      index: true,
+      admin: {
+        readOnly: true,
+        position: "sidebar",
+      },
+    },
+    {
       name: "status",
       type: "select",
       defaultValue: "pending",
+      index: true,
       options: [
         { label: "Pending", value: "pending" },
         { label: "Processing", value: "processing" },

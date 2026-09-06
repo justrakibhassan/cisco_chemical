@@ -151,6 +151,51 @@ export async function updateUserAction(data: {
   }
 }
 
+export async function changePasswordAction(data: {
+  currentPassword: string;
+  newPassword: string;
+}) {
+  const user = await getCurrentUser();
+  if (!user) {
+    return { error: "Not authenticated" };
+  }
+
+  if (!data.newPassword || data.newPassword.length < 6) {
+    return { error: "New password must be at least 6 characters long" };
+  }
+
+  const payload = await getPayload({ config: configPromise });
+
+  try {
+    // Verify current password by attempting login
+    const loginAttempt = await payload.login({
+      collection: "users",
+      data: {
+        email: user.email,
+        password: data.currentPassword,
+      },
+    });
+
+    if (!loginAttempt.user) {
+      return { error: "Current password does not match our records" };
+    }
+
+    // Update with new password
+    await payload.update({
+      collection: "users",
+      id: user.id,
+      data: {
+        password: data.newPassword,
+      },
+    });
+
+    return { success: true };
+  } catch (err) {
+    console.error("changePasswordAction error:", err);
+    return { error: "Failed to update password. Please check your current password." };
+  }
+}
+
 export async function getCartAction() {
   const user = await getCurrentUser();
   if (!user) return null;

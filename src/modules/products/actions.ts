@@ -3,6 +3,7 @@
 import configPromise from "@payload-config";
 import { getPayload } from "payload";
 import { Product } from "@/payload-types";
+import { getCurrentUser } from "@/modules/auth/actions";
 
 export interface GetProductsParams {
   query?: string;
@@ -105,17 +106,22 @@ export async function getCategoriesAction() {
 }
 
 export async function createQuoteAction(data: {
-  userId: string | number;
+  userId?: string | number;
   productId: string | number;
   note?: string;
   quantity?: number;
 }) {
+  const user = await getCurrentUser();
+  if (!user) {
+    return { error: "You must be signed in to submit a quote request" };
+  }
+
   const payload = await getPayload({ config: configPromise });
   try {
     const quote = await payload.create({
       collection: "quotes",
       data: {
-        user: Number(data.userId),
+        user: user.id,
         items: [
           {
             product: Number(data.productId),
@@ -134,16 +140,21 @@ export async function createQuoteAction(data: {
 }
 
 export async function createBulkQuoteAction(data: {
-  userId: string | number;
+  userId?: string | number;
   items: { productId: string | number; quantity: number }[];
   note?: string;
 }) {
+  const user = await getCurrentUser();
+  if (!user) {
+    return { error: "You must be signed in to submit a bulk quote request" };
+  }
+
   const payload = await getPayload({ config: configPromise });
   try {
     const quote = await payload.create({
       collection: "quotes",
       data: {
-        user: Number(data.userId),
+        user: user.id,
         items: data.items.map((item) => ({
           product: Number(item.productId),
           quantity: item.quantity,

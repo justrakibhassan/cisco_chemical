@@ -75,6 +75,7 @@ export const Quotes: CollectionConfig = {
       type: "relationship",
       relationTo: "users",
       required: true,
+      index: true,
       admin: {
         readOnly: true,
       },
@@ -108,6 +109,7 @@ export const Quotes: CollectionConfig = {
       type: "select",
       defaultValue: "pending",
       required: true,
+      index: true,
       options: [
         { label: "Pending Review", value: "pending" },
         { label: "Quoted", value: "quoted" },

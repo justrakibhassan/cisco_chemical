@@ -1,5 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { toast } from "sonner";
+import { submitContactInquiryAction } from "@/modules/home/actions";
 import {
   MapPin,
   Phone,
@@ -110,19 +112,37 @@ const ContactPage = () => {
     }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!formData.name || !formData.email || !formData.message) {
+      toast.error("Please fill in all required fields (Name, Email, Message)");
+      return;
+    }
+
     setIsSubmitting(true);
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsSubmitting(false);
-    alert("Message sent successfully!");
-    setFormData({
-      name: "",
-      email: "",
-      company: "",
-      inquiry: "general",
-      message: "",
-    });
+    try {
+      const res = await submitContactInquiryAction(formData);
+      if (res.success) {
+        toast.success("Inquiry Submitted Successfully!", {
+          description:
+            "Our chemical engineering specialists will contact you within 24 business hours.",
+        });
+        setFormData({
+          name: "",
+          email: "",
+          company: "",
+          inquiry: "general",
+          message: "",
+        });
+      } else {
+        toast.error(res.error || "Failed to submit message");
+      }
+    } catch (err) {
+      console.error("Contact submission error:", err);
+      toast.error("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
