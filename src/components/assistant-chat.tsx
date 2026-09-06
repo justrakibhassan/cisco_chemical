@@ -3,17 +3,19 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useChat } from "@ai-sdk/react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import { 
   Bot, 
   X, 
   Send, 
   MessageCircle, 
-  Sparkles,
-  Beaker,
-  ChevronRight,
-  ShieldCheck,
-  Zap,
-  RotateCcw
+  Sparkles, 
+  Beaker, 
+  ChevronRight, 
+  ShieldCheck, 
+  Zap, 
+  RotateCcw,
+  ArrowRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -96,6 +98,82 @@ export const AssistantChat = () => {
           .map(p => p.text)
           .join('')
       : "";
+  };
+
+  const renderFormattedLine = (line: string) => {
+    // Regex matches markdown links, raw /products/... routes, and bold syntax
+    const regex = /(\[.*?\]\(.*?\)|\/products\/[a-zA-Z0-9_-]+|\*\*.*?\*\*)/g;
+    const parts = line.split(regex);
+
+    return parts.map((part, i) => {
+      const mdLinkMatch = part.match(/^\[(.*?)\]\((.*?)\)$/);
+      if (mdLinkMatch) {
+        const [, label, url] = mdLinkMatch;
+        return (
+          <Link
+            key={i}
+            href={url}
+            onClick={() => setIsOpen(false)}
+            className="inline-flex items-center gap-0.5 font-bold text-emerald-600 hover:text-emerald-700 underline underline-offset-2"
+          >
+            {label}
+          </Link>
+        );
+      }
+
+      if (part.startsWith("/products/")) {
+        return (
+          <Link
+            key={i}
+            href={part}
+            onClick={() => setIsOpen(false)}
+            className="inline-flex items-center gap-1 font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md text-xs border border-emerald-200/70 transition-all hover:bg-emerald-100"
+          >
+            <span>View Product</span>
+            <ArrowRight className="w-3 h-3" />
+          </Link>
+        );
+      }
+
+      if (part.startsWith("**") && part.endsWith("**")) {
+        return (
+          <strong key={i} className="font-bold text-zinc-950">
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
+
+      return part;
+    });
+  };
+
+  const FormattedMessage = ({ text }: { text: string }) => {
+    const lines = text.split("\n");
+
+    return (
+      <div className="space-y-1 text-[14px]">
+        {lines.map((line, idx) => {
+          const trimmed = line.trim();
+          if (!trimmed) {
+            return <div key={idx} className="h-1.5" />;
+          }
+
+          const isBullet = trimmed.startsWith("- ") || trimmed.startsWith("* ");
+          const content = isBullet ? trimmed.slice(2) : line;
+
+          if (isBullet) {
+            return (
+              <div key={idx} className="flex items-start gap-2 pl-0.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 shrink-0" />
+                <div className="flex-1">{renderFormattedLine(content)}</div>
+              </div>
+            );
+          }
+
+          return <div key={idx}>{renderFormattedLine(line)}</div>;
+        })}
+      </div>
+    );
   };
 
   return (
@@ -227,10 +305,14 @@ export const AssistantChat = () => {
                           "px-4 py-2.5 rounded-2xl text-[15px] leading-relaxed",
                           m.role === "user"
                             ? "bg-black text-white rounded-tr-none"
-                            : "bg-white text-zinc-800 border border-zinc-200 rounded-tl-none"
+                            : "bg-white text-zinc-800 border border-zinc-200 rounded-tl-none shadow-sm"
                         )}
                       >
-                        {getMessageText(m)}
+                        {m.role === "user" ? (
+                          getMessageText(m)
+                        ) : (
+                          <FormattedMessage text={getMessageText(m)} />
+                        )}
                       </div>
                       <span className="text-[10px] text-zinc-400 font-medium px-1 uppercase tracking-wider">
                         {m.role === "user" ? "You" : "Cisco AI"}

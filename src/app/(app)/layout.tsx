@@ -16,11 +16,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Cisco Chemical Inc",
-  description: "Next app",
+  title: "Cisco Chemical Inc - Industrial Chemical Manufacturing & Distribution",
+  description:
+    "Enterprise B2B chemical manufacturing, specialty polymers, battery materials, pigments, and bulk distribution platform.",
 };
 
 import { CurrencyProvider } from "@/providers/currency-provider";
+import { CartProvider } from "@/providers/cart-provider";
 import { AssistantChat } from "@/components/assistant-chat";
 import { ChatErrorBoundary } from "@/components/chat-error-boundary";
 import { Suspense } from "react";
@@ -51,17 +53,19 @@ export default async function RootLayout({
         >
           <NuqsAdapter>
             <CurrencyProvider>
-              <Suspense fallback={<div className="h-20" />}>
-                <Navbar user={user as UserType} />
-              </Suspense>
-              <div className="flex flex-col min-h-screen">
-                <main className="flex-1">{children}</main>
-              </div>
-              <BottomNav user={user as UserType} />
-              <Footer />
-              <ChatErrorBoundary>
-                <AssistantChat />
-              </ChatErrorBoundary>
+              <CartProvider initialUser={user as UserType}>
+                <Suspense fallback={<div className="h-20" />}>
+                  <Navbar user={user as UserType} />
+                </Suspense>
+                <div className="flex flex-col min-h-screen">
+                  <main className="flex-1">{children}</main>
+                </div>
+                <BottomNav user={user as UserType} />
+                <Footer />
+                <ChatErrorBoundary>
+                  <AssistantChat />
+                </ChatErrorBoundary>
+              </CartProvider>
             </CurrencyProvider>
           </NuqsAdapter>
           <Toaster position="bottom-right" />

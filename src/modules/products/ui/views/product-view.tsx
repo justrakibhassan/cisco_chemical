@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useQueryState, parseAsInteger, parseAsBoolean } from "nuqs";
 import { Search, SlidersHorizontal, X, Grid, List } from "lucide-react";
 import { Product, Category } from "@/payload-types";
@@ -40,12 +40,19 @@ import { Button } from "@/components/ui/button";
 
 interface ProductsViewProps {
   initialProducts?: Product[];
+  initialTotalDocs?: number;
+  initialTotalPages?: number;
+  initialCategories?: Category[];
 }
 
 const EMPTY_ARRAY: Product[] = [];
+const EMPTY_CATEGORIES: Category[] = [];
 
 export function ProductsView({
   initialProducts = EMPTY_ARRAY,
+  initialTotalDocs,
+  initialTotalPages,
+  initialCategories = EMPTY_CATEGORIES,
 }: ProductsViewProps) {
   const { addToCart } = useCart();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -71,17 +78,38 @@ export function ProductsView({
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
 
   // Data State
-  const [loading, setLoading] = useState(initialProducts.length === 0);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState<{
     products: Product[];
     totalDocs: number;
     totalPages: number;
   }>({
     products: initialProducts,
-    totalDocs: initialProducts.length,
-    totalPages: Math.ceil(initialProducts.length / 12) || 1,
+    totalDocs: initialTotalDocs ?? initialProducts.length,
+    totalPages:
+      initialTotalPages ?? (Math.ceil(initialProducts.length / 12) || 1),
   });
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>(initialCategories);
+  const isFirstRender = useRef(true);
+
+  // Synchronize when initialCategories change from SSR navigation
+  useEffect(() => {
+    if (initialCategories.length > 0) {
+      setCategories(initialCategories);
+    }
+  }, [initialCategories]);
+
+  // Synchronize when initialProducts change from SSR navigation
+  useEffect(() => {
+    if (initialProducts.length > 0 || initialTotalDocs !== undefined) {
+      setData({
+        products: initialProducts,
+        totalDocs: initialTotalDocs ?? initialProducts.length,
+        totalPages:
+          initialTotalPages ?? (Math.ceil(initialProducts.length / 12) || 1),
+      });
+    }
+  }, [initialProducts, initialTotalDocs, initialTotalPages]);
 
   const fetchProducts = useCallback(async () => {
     setLoading(true);
@@ -104,44 +132,26 @@ export function ProductsView({
   }, [search, category, minPrice, maxPrice, inStock, sort, page]);
 
   useEffect(() => {
-    // Check if we have any active filters
-    const hasActiveFilters =
-      (search && search !== "") ||
-      category !== "all" ||
-      minPrice > 0 ||
-      maxPrice < 10000 ||
-      inStock ||
-      page > 1;
-
-    // Fetch if we have no initial products OR if filters are active
-    if (initialProducts.length === 0 || hasActiveFilters) {
-      fetchProducts();
-    } else {
-      setData({
-        products: initialProducts,
-        totalDocs: initialProducts.length,
-        totalPages: Math.ceil(initialProducts.length / 12) || 1,
-      });
-      setLoading(false);
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      if (initialProducts.length === 0 && initialTotalDocs === undefined) {
+        fetchProducts();
+      }
+      return;
     }
-  }, [
-    fetchProducts,
-    initialProducts,
-    search,
-    category,
-    minPrice,
-    maxPrice,
-    inStock,
-    page,
-  ]);
+
+    fetchProducts();
+  }, [fetchProducts, initialProducts.length, initialTotalDocs]);
 
   useEffect(() => {
-    const fetchCats = async () => {
-      const cats = await getCategoriesAction();
-      setCategories(cats);
-    };
-    fetchCats();
-  }, []);
+    if (categories.length === 0) {
+      const fetchCats = async () => {
+        const cats = await getCategoriesAction();
+        setCategories(cats);
+      };
+      fetchCats();
+    }
+  }, [categories.length]);
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);

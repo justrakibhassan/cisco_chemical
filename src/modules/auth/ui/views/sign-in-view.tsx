@@ -1,14 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Loader2, Mail, Lock, ArrowRight, ShieldCheck, Terminal, ArrowLeft } from "lucide-react";
 
 import { signInAction } from "../../actions";
@@ -32,13 +31,15 @@ type SignInFormValues = z.infer<typeof signInSchema>;
 
 export const SignInView = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
   const [authLogs, setAuthLogs] = useState<string[]>([
     "SEC: TLS 1.3 Connection handshake complete.",
     "SYS: Checking CISCO Chem core modules...",
     "SEC: Socket connection verified secure.",
     "SYS: Awaiting credentials input...",
   ]);
-  const router = useRouter();
 
   const form = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
@@ -72,7 +73,7 @@ export const SignInView = () => {
         toast.success("Login Successful", {
           description: "Welcome back to Cisco Chemical.",
         });
-        router.push("/dashboard");
+        router.push(callbackUrl);
         router.refresh();
       } else {
         toast.error("Authentication Failed", {

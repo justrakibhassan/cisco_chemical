@@ -7,6 +7,7 @@ export const Categories: CollectionConfig = {
       name: "name",
       type: "text",
       required: true,
+      index: true,
     },
   ],
 };

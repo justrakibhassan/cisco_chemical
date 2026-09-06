@@ -4,7 +4,6 @@ import { Order as OrderType, Quote as QuoteType } from "@/payload-types";
 import { Package, Calendar, ChevronRight, Calculator, CheckCircle2, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { toast } from "sonner";
 
 import { DownloadInvoice } from "../components/download-invoice";
 
@@ -242,16 +241,13 @@ export const OrdersView = ({ orders, quotes, user }: OrdersViewProps) => {
                         <div className="text-3xl font-black text-slate-900">
                           ${quote.quotedPrice?.toLocaleString()}
                         </div>
-                        <button
-                          onClick={() => {
-                            toast.info("Connecting to Stripe...");
-                            // In a real app, this would redirect to checkout with the quote ID
-                          }}
-                          className="bg-green-600 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-green-700 transition-all flex items-center gap-2 shadow-lg shadow-green-600/20 active:scale-95"
+                        <Link
+                          href={`/checkout?quoteId=${quote.id}`}
+                          className="bg-green-600 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-green-700 transition-all inline-flex items-center gap-2 shadow-lg shadow-green-600/20 active:scale-95"
                         >
                           <CheckCircle2 className="w-4 h-4" />
                           Pay & Order Now
-                        </button>
+                        </Link>
                       </div>
                     )}
 

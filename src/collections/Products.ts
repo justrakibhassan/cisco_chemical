@@ -60,6 +60,7 @@ export const Products: CollectionConfig = {
           type: "number",
           required: true,
           defaultValue: 0,
+          index: true,
           min: 0, // 👈 মাইনাস ভ্যালু দেওয়া যাবে না
           admin: { width: "50%" },
         },
@@ -72,6 +73,7 @@ export const Products: CollectionConfig = {
           name: "price",
           type: "number",
           required: true,
+          index: true,
           label: "Selling Price (বর্তমান দাম)",
           min: 0,
           admin: { width: "50%" },
