@@ -127,7 +127,7 @@ Guidelines:
 
     // 2. Call Gemini
     const result = streamText({
-      model: googleAI("gemini-flash-latest"),
+      model: googleAI("gemini-2.5-flash"),
       system: systemPrompt,
       messages,
     });
