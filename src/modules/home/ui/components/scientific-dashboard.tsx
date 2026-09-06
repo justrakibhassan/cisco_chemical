@@ -138,23 +138,13 @@ export const ScientificDashboard: React.FC<ScientificDashboardProps> = ({
     "INF: Catalysis phase 3 calibration complete.",
     "INF: Initializing molecular synthesis engine...",
   ]);
-  const [fluctuatedStats, setFluctuatedStats] = useState({
-    temp: 0,
-    pressure: 0,
-    flowRate: 0,
-    purity: 0,
-  });
-
   const molecule = moleculePresets[slideIndex] || moleculePresets[0];
 
-  // Initialize and fluctuate stats
+  const [fluctuatedStats, setFluctuatedStats] = useState(molecule.reactorStats);
+
+  // Update stats if molecule preset changes
   useEffect(() => {
-    setFluctuatedStats({
-      temp: molecule.reactorStats.temp,
-      pressure: molecule.reactorStats.pressure,
-      flowRate: molecule.reactorStats.flowRate,
-      purity: molecule.reactorStats.purity,
-    });
+    setFluctuatedStats(molecule.reactorStats);
   }, [molecule]);
 
   useEffect(() => {

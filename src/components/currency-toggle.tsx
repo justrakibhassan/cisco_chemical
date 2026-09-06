@@ -7,6 +7,13 @@ import { motion } from "framer-motion";
 
 export const CurrencyToggle = () => {
   const { currency, setCurrency } = useCurrency();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const activeCurrency = mounted ? currency : "USD";
 
   return (
     <div className="flex items-center gap-1 p-1 bg-gray-100 rounded-full border border-gray-200 shadow-inner">
@@ -15,12 +22,12 @@ export const CurrencyToggle = () => {
         size="sm"
         onClick={() => setCurrency("USD")}
         className={`relative rounded-full px-3 h-8 transition-all ${
-          currency === "USD" 
+          activeCurrency === "USD" 
             ? "text-white font-bold hover:bg-transparent hover:text-white" 
             : "text-gray-500 hover:text-gray-900 hover:bg-gray-200/50"
         }`}
       >
-        {currency === "USD" && (
+        {activeCurrency === "USD" && (
           <motion.div
             layoutId="currency-tab"
             className="absolute inset-0 bg-green-600 rounded-full shadow-md"
@@ -35,12 +42,12 @@ export const CurrencyToggle = () => {
         size="sm"
         onClick={() => setCurrency("EUR")}
         className={`relative rounded-full px-3 h-8 transition-all ${
-          currency === "EUR" 
+          activeCurrency === "EUR" 
             ? "text-white font-bold hover:bg-transparent hover:text-white" 
             : "text-gray-500 hover:text-gray-900 hover:bg-gray-200/50"
         }`}
       >
-        {currency === "EUR" && (
+        {activeCurrency === "EUR" && (
           <motion.div
             layoutId="currency-tab"
             className="absolute inset-0 bg-green-600 rounded-full shadow-md"

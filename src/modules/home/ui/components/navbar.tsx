@@ -37,6 +37,7 @@ interface NavbarProps {
 }
 
 export const Navbar = ({ user: initialUser }: NavbarProps) => {
+  const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -45,6 +46,10 @@ export const Navbar = ({ user: initialUser }: NavbarProps) => {
   const [user, setUser] = useState<UserType | null>(initialUser || null);
   const { count } = useCart();
   const router = useRouter();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (initialUser) {
@@ -146,7 +151,7 @@ export const Navbar = ({ user: initialUser }: NavbarProps) => {
             >
               <ShoppingCart className="w-4 h-4" />
               <span className="text-sm hidden lg:inline">Cart</span>
-              {count > 0 && (
+              {mounted && count > 0 && (
                 <span className="absolute -top-2 -right-2 bg-green-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white shadow-sm">
                   {count}
                 </span>
@@ -180,7 +185,7 @@ export const Navbar = ({ user: initialUser }: NavbarProps) => {
                 className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 relative"
               >
                 <ShoppingCart className="h-5 w-5 text-gray-700" />
-                {count > 0 && (
+                {mounted && count > 0 && (
                   <span className="absolute top-0 right-0 bg-green-600 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
                     {count}
                   </span>
